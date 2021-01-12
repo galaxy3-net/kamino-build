@@ -67,7 +67,7 @@ Vagrant.configure("2") do |config|
       vb.customize ['createhd', '--filename', disk01, '--variant', 'Fixed', '--size', 2 * 1024]
     end
 
-    vb.customize ['storageattach', :id, '--storagectl', 'SATA', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk01]
+    vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk01]
 
 	#vb.customize ['modifyvm', :id, '--hda', disk01]
 
