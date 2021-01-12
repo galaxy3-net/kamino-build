@@ -64,7 +64,7 @@ Vagrant.configure("2") do |config|
 
     disk01 = './disk01.vdi'
     unless File.exist?(disk01)
-      vb.customize ['createhd', '--filename', disk01, '--variant', 'Fixed', '--size', 20 * 1024]
+      vb.customize ['createhd', '--filename', disk01, '--variant', 'Fixed', '--size', 2 * 1024]
     end
 
     #vb.customize['storageattach', :id, '--storagectl', 'SATA', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk01]
