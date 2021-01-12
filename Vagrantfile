@@ -63,11 +63,14 @@ Vagrant.configure("2") do |config|
     #vb.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
 
     disk01 = './disk01.vdi'
+    disk02 = './disk02.vdi'
     unless File.exist?(disk01)
       vb.customize ['createhd', '--filename', disk01, '--variant', 'Standard', '--size', 500 * 1024]
+      vb.customize ['createhd', '--filename', disk02, '--variant', 'Standard', '--size', 500 * 1024]
     end
 
     vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk01]
+    vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk02]
 
 	#vb.customize ['modifyvm', :id, '--hda', disk01]
 
@@ -84,8 +87,13 @@ Vagrant.configure("2") do |config|
      tr -d '\r' < /vagrant/functions/ready >/usr/local/bin/ready && chmod 0700 /usr/local/bin/ready
      /usr/local/bin/ready
      sudo blkid | egrep '/dev/sdb' | egrep ext4 || mkfs.ext4 /dev/sdb
+     sudo blkid | egrep '/dev/sdc' | egrep ext4 || mkfs.ext4 /dev/sdc
      egrep '/dev/sdb' /etc/fstab || echo '/dev/sdb /opt	ext4    errors=remount-ro 0       1' >> /etc/fstab
+     egrep '/dev/sdc' /etc/fstab || echo '/dev/sdb /usr/share2	ext4    errors=remount-ro 0       1' >> /etc/fstab
+
+     # find . -print | cpio -pdm /opt/share
      mount /opt
+     mount /usr/share2
      #/usr/local/bin/install_pkgs
      #/usr/local/bin/pull_repos
      #iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
@@ -96,9 +104,14 @@ Vagrant.configure("2") do |config|
     # setup_vnc
     ls -l /home/vagrant
 SHELL
-  config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook = "/home/vagrant/playbook.yml"
-    ansible.galaxy_role_file = "/home/vagrant/requirements.yml"
-    inventory_path = "/home/vagrant/hosts"
-  end
+#  config.vm.provision "ansible_local" do |ansible|
+#    ansible.playbook = "/home/vagrant/playbook.yml"
+#    ansible.galaxy_role_file = "/home/vagrant/requirements.yml"
+#    inventory_path = "/home/vagrant/hosts"
+#  end
+  config.vm.provision "shell", inline: <<-SHELL
+	apt-get autoremove -y
+	apt-get clean
+	dd if=/dev/zero of=/dummy bs=1M || rm /dev/zero
+SHELL
 end
