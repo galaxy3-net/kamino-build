@@ -62,11 +62,12 @@ Vagrant.configure("2") do |config|
     vb.memory = "8192"
     #vb.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
 
-    unless File.exist?("./disk1")
-      vb.customize ['createhd', '--filename', disk, '--variant', 'Fixed', '--size', 20 * 1024]
+    disk01 = './disk01.vdi'
+    unless File.exist?(disk01)
+      vb.customize ['createhd', '--filename', disk01, '--variant', 'Fixed', '--size', 20 * 1024]
     end
 
-    vb.customize['storageattach', :id, '--storagectl', 'SATAController', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk]
+    vb.customize['storageattach', :id, '--storagectl', 'SATAController', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk01]
 
     vb.customize ['modifyvm', :id, '--nicpromisc0', 'allow-all']
     vb.customize ['modifyvm', :id, '--nictype0', 'virtio']
