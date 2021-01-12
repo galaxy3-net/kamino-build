@@ -62,6 +62,12 @@ Vagrant.configure("2") do |config|
     vb.memory = "8192"
     #vb.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
 
+    unless File.exist?("./disk1")
+      vb.customize ['createhd', '--filename', disk, '--variant', 'Fixed', '--size', 20 * 1024]
+    end
+
+    vb.customize['storageattach', :id, '--storagectl', 'SATAController', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk]
+
     vb.customize ['modifyvm', :id, '--nicpromisc0', 'allow-all']
     vb.customize ['modifyvm', :id, '--nictype0', 'virtio']
     vb.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
@@ -84,9 +90,9 @@ Vagrant.configure("2") do |config|
     # setup_vnc
     ls -l /home/vagrant
 SHELL
-  config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook = "/home/vagrant/playbook.yml"
-    ansible.galaxy_role_file = "/home/vagrant/requirements.yml"
-    inventory_path = "/home/vagrant/hosts"
-  end
+#  config.vm.provision "ansible_local" do |ansible|
+#    ansible.playbook = "/home/vagrant/playbook.yml"
+#    ansible.galaxy_role_file = "/home/vagrant/requirements.yml"
+#    inventory_path = "/home/vagrant/hosts"
+#  end
 end
