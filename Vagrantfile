@@ -83,6 +83,9 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
      tr -d '\r' < /vagrant/functions/ready >/usr/local/bin/ready && chmod 0700 /usr/local/bin/ready
      /usr/local/bin/ready
+     sudo blkid | egrep '/dev/sdb' | egrep ext4 || mkfs.ext4 /dev/sdb
+     egrep '/dev/sdb' /etc/fstab || echo '/dev/sdb /opt	ext4    errors=remount-ro 0       1' >> /etc/fstab
+     mount /opt
      #/usr/local/bin/install_pkgs
      #/usr/local/bin/pull_repos
      #iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
