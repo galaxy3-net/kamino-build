@@ -1,0 +1,31 @@
+---
+# vars file for ansible
+
+pkgs:
+#  - tree
+#  - apache2
+#  - make
+#  - containerd
+#  - docker
+#  - docker.io
+#  - net-tools
+#  - dos2unix
+#  - supervisor
+  - htop
+  - kali-linux-everything
+  - docker
+  - docker.io
+  - alien
+  - xrdp
+
+deb_pkgs:
+  - http://security.ubuntu.com/ubuntu/pool/universe/p/pycairo/python-cairo_1.16.2-2ubuntu2_amd64.deb
+  - http://azure.archive.ubuntu.com/ubuntu/pool/universe/p/pygobject-2/python-gobject-2_2.28.6-14ubuntu1_amd64.deb
+  - http://archive.ubuntu.com/ubuntu/pool/universe/p/pygtk/python-gtk2_2.24.0-5.1ubuntu2_amd64.deb
+  - https://www.tenable.com/downloads/api/v1/public/pages/nessus/downloads/12207/download?i_agree_to_tenable_license_agreement=true
+
+dvwa:
+  - { src: files/etc/systemd/system/dvwa.service, owner: root, group: root, mode: 755, dest: /etc/systemd/system/dvwa.service }
+  - { src: files/usr/local/bin/dvwa, owner: root, group: root, mode: 755, dest: /usr/local/bin }
+
+#  https://stackoverflow.com/questions/64359059/whet-i-try-to-run-zenmap-the-terminal-show-me-this

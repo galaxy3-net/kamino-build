@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+#exec | tee -a /var/log/named_startup.log
+#exec 2>&1
+
+CONTAINER_NAME=dvwa
+CONTAINER_IMAGE=vulnerables/web-dvwa:latest
+
+function start () {
+    docker pull ${CONTAINER_IMAGE}
+	sudo -E docker run -d -t --entrypoint "/bin/sh" --name ${CONTAINER_NAME} \
+		-p 10.55.56.10:80:80/tcp \
+		${CONTAINER_IMAGE}
+}
+
+#cd /repos/bind/Docker
+#make pull
+
+#ifconfig eth1:0 10.55.55.2 netmask 255.255.255.0 up
+
+container-rm ${CONTAINER_NAME}
+start
+#container-alive-monitor ${CONTAINER_NAME}

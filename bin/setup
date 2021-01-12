@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+#function ubuntu_setup () {
+  # https://www.vagrantup.com/docs/providers/virtualbox/boxes.html
+  # https://www.vagrantup.com/docs/boxes/base
+
+  apt-get install linux-headers-$(uname -r) build-essential dkms
+
+  mount /dev/cdrom /media/cdrom
+
+  sh /media/cdrom/VBoxLinuxAdditions.run
+
+  useradd vagrant -m -s /bin/bash
+  printf 'vagrant\nvagrant' | sudo passwd vagrant
+
+  su - vagrant -c "ssh-keygen -f ~/.ssh/id_vagrant -N ''"
+
+  sudo su - vagrant -c "curl -o ~/.ssh/authorized_keys https://raw.githubusercontent.com/hashicorp/vagrant/master/keys/vagrant.pub"
+
+  sudo su - -c "echo 'vagrant ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/vagrant"
+
+  sudo dd if=/dev/zero of=/erase_me bs=100M || sudo rm erase_me
+
+  cat <<__EOD__ > /etc/init.d/setip
+#!/usr/bin/bash
+
+  exec >> /var/log/S99setip.log
+  exec 2>&1
+
+
+function setip () {
+  echo setting ip
+#  ifconfig eth0 10.0.2.15  netmask 255.255.255.0
+#  route add default gw 10.0.2.2
+}
+  date
+  ifconfig eth0 | awk '{print $1}' | egrep '^inet$' || setip
+  ip addr
+__EOD__
+
+chmod u+x /etc/init.d/setip
+
+ln -s /etc/init.d/setip /etc/rc3.d/S99setip
