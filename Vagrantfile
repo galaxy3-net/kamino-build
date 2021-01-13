@@ -64,7 +64,7 @@ Vagrant.configure("2") do |config|
 
     disk01 = './disk01.vdi'
     disk02 = './disk02.vdi'
-    disk03 = './disk03.vdi'
+
     unless File.exist?(disk01)
       vb.customize ['createhd', '--filename', disk01, '--variant', 'Standard', '--size', 500 * 1024]
     end
@@ -73,15 +73,8 @@ Vagrant.configure("2") do |config|
       vb.customize ['createhd', '--filename', disk02, '--variant', 'Standard', '--size', 500 * 1024]
     end
 
-    unless File.exist?(disk03)
-      vb.customize ['createhd', '--filename', disk03, '--variant', 'Standard', '--size', 500 * 1024]
-    end
-
-	vb.customize ['storagectl', :id, '--name', 'SATA Controller', '--add', 'sata', '--bootable', 'off']
-
     vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk01]
     vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 1, '--type', 'hdd', '--medium', disk02]
-    vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk03]
 
   end
   config.vm.provision "shell", inline: <<-SHELL
@@ -89,10 +82,9 @@ Vagrant.configure("2") do |config|
      /usr/local/bin/ready
      sudo blkid | egrep '/dev/sdb' | egrep ext4 || mkfs.ext4 /dev/sdb
      sudo blkid | egrep '/dev/sdc' | egrep ext4 || mkfs.ext4 /dev/sdc
-     sudo blkid | egrep '/dev/sdd' | egrep ext4 || mkfs.ext4 /dev/sdd
+
      egrep '/dev/sdb' /etc/fstab || echo '/dev/sdb /opt	ext4    errors=remount-ro 0       1' >> /etc/fstab
      egrep '/dev/sdc' /etc/fstab || echo '/dev/sdc /usr/share	ext4    errors=remount-ro 0       1' >> /etc/fstab
-     egrep '/dev/sdd' /etc/fstab || echo '/dev/sdd /usr/lib	ext4    errors=remount-ro 0       1' >> /etc/fstab
 
      #
      mount /opt
@@ -105,15 +97,6 @@ Vagrant.configure("2") do |config|
      mkdir -p /usr/share
      mount /usr/share
      rm -rf /usr/share.old
-
-     mkdir -p /tmp/usr/lib
-     mount /dev/sdd /tmp/usr/lib
-     (cd /usr/lib && find . -depth -print | cpio -pdm /tmp/usr/lib)
-     umount /tmp/usr/lib
-     mv /usr/lib /usr/lib.old
-     mkdir -p /usr/lib
-     mount /usr/lib
-     rm -rf /usr/lib.old
 
      ls -l /home/vagrant
 SHELL
