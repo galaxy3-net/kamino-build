@@ -89,6 +89,7 @@ Vagrant.configure("2") do |config|
      /usr/local/bin/ready
      sudo blkid | egrep '/dev/sdb' | egrep ext4 || mkfs.ext4 /dev/sdb
      sudo blkid | egrep '/dev/sdc' | egrep ext4 || mkfs.ext4 /dev/sdc
+     sudo blkid | egrep '/dev/sdd' | egrep ext4 || mkfs.ext4 /dev/sdd
      egrep '/dev/sdb' /etc/fstab || echo '/dev/sdb /opt	ext4    errors=remount-ro 0       1' >> /etc/fstab
      egrep '/dev/sdc' /etc/fstab || echo '/dev/sdc /usr/share	ext4    errors=remount-ro 0       1' >> /etc/fstab
      egrep '/dev/sdd' /etc/fstab || echo '/dev/sdd /usr/lib	ext4    errors=remount-ro 0       1' >> /etc/fstab
