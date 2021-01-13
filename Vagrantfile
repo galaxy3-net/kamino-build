@@ -99,20 +99,13 @@ Vagrant.configure("2") do |config|
 
      mkdir -p /tmp/usr/share
      mount /dev/sdc /tmp/usr/share
-
      (cd /usr/share && find . -print | cpio -pdm /tmp/usr/share)
      umount /tmp/usr/share
-
+     mv /usr/share /usr/share.old
+     mkdir -p /usr/share
      mount /usr/share
-     #/usr/local/bin/install_pkgs
-     #/usr/local/bin/pull_repos
-     #iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-     #iptables -A INPUT -p tcp --dport 3389 -m
-   #config.vm.provision "shell", inline: <<-SHELL state --state NEW -j ACCEPT
 
-    # setup_xrdp
-    # setup_vnc
-    ls -l /home/vagrant
+     ls -l /home/vagrant
 SHELL
 #  config.vm.provision "ansible_local" do |ansible|
 #    ansible.playbook = "/home/vagrant/playbook.yml"
@@ -122,6 +115,6 @@ SHELL
   config.vm.provision "shell", inline: <<-SHELL
 	apt-get autoremove -y
 	apt-get clean
-	dd if=/dev/zero of=/dummy bs=1M || rm /dev/dummy
+	dd if=/dev/zero of=/dummy bs=1M || rm /dummy
 SHELL
 end
