@@ -122,6 +122,6 @@ SHELL
   config.vm.provision "shell", inline: <<-SHELL
 	apt-get autoremove -y
 	apt-get clean
-	dd if=/dev/zero of=/dummy bs=1M || rm /dev/zero
+	dd if=/dev/zero of=/dummy bs=1M || rm /dev/dummy
 SHELL
 end
