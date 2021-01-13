@@ -66,6 +66,9 @@ Vagrant.configure("2") do |config|
     disk02 = './disk02.vdi'
     unless File.exist?(disk01)
       vb.customize ['createhd', '--filename', disk01, '--variant', 'Standard', '--size', 500 * 1024]
+    end
+
+    unless File.exist?(disk02)
       vb.customize ['createhd', '--filename', disk02, '--variant', 'Standard', '--size', 500 * 1024]
     end
 
