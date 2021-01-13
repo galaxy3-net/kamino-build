@@ -77,9 +77,11 @@ Vagrant.configure("2") do |config|
       vb.customize ['createhd', '--filename', disk03, '--variant', 'Standard', '--size', 500 * 1024]
     end
 
+	vb.customize ['storagectl', :id, '--name', 'SATA Controller', '--add', 'sata', '--bootable', 'off']
+
     vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk01]
     vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 1, '--type', 'hdd', '--medium', disk02]
-    vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 1, '--device', 2, '--type', 'hdd', '--medium', disk03]
+    vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', disk03]
 
   end
   config.vm.provision "shell", inline: <<-SHELL
