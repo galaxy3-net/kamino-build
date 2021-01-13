@@ -1,18 +1,11 @@
 [Unit]
 Description=DVWA Service
 After=network.target
-StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-Restart=never
-RestartSec=1
-User=root
-ExecStartPre=
-ExecStart=/usr/local/bin/dvwa
-ExecStartPost=
-ExecStop=
-ExecReload=
+Restart=on-failure
+ExecStart=/usr/sbin/dvwa
 
 [Install]
 WantedBy=multi-user.target

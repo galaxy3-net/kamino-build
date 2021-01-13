@@ -11,6 +11,7 @@ pkgs:
 #  - net-tools
 #  - dos2unix
 #  - supervisor
+  - supervisor
   - htop
   - kali-linux-everything
   - docker
