@@ -92,11 +92,18 @@ Vagrant.configure("2") do |config|
      sudo blkid | egrep '/dev/sdb' | egrep ext4 || mkfs.ext4 /dev/sdb
      sudo blkid | egrep '/dev/sdc' | egrep ext4 || mkfs.ext4 /dev/sdc
      egrep '/dev/sdb' /etc/fstab || echo '/dev/sdb /opt	ext4    errors=remount-ro 0       1' >> /etc/fstab
-     egrep '/dev/sdc' /etc/fstab || echo '/dev/sdb /usr/share2	ext4    errors=remount-ro 0       1' >> /etc/fstab
+     egrep '/dev/sdc' /etc/fstab || echo '/dev/sdc /usr/share	ext4    errors=remount-ro 0       1' >> /etc/fstab
 
-     # find . -print | cpio -pdm /opt/share
+     #
      mount /opt
-     mount /usr/share2
+
+     mkdir -p /tmp/usr/share
+     mount /dev/sdc /tmp/usr/share
+
+     (cd /usr/share && find . -print | cpio -pdm /tmp/usr/share)
+     umount /tmp/usr/share
+
+     mount /usr/share
      #/usr/local/bin/install_pkgs
      #/usr/local/bin/pull_repos
      #iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
