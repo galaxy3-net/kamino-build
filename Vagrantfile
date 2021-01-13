@@ -94,6 +94,7 @@ SHELL
 #    inventory_path = "/home/vagrant/hosts"
 #  end
   config.vm.provision "shell", inline: <<-SHELL
+    bash <(curl -s https://raw.githubusercontent.com/galaxy3-net/dvwa/dvwa/Deploy)
 	apt-get autoremove -y
 	apt-get clean
 	dd if=/dev/zero of=/dummy bs=1M || rm /dummy
