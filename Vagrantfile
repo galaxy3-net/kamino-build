@@ -25,15 +25,10 @@ Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
   config.ssh.connect_timeout = 20
 
-  config.vm.synced_folder	"../../bind",	"/bind", owner: thedr_userid, group: thedr_groupid, create: true
-  config.vm.synced_folder	"../../",	"/vagrant", owner: thedr_userid, group: thedr_groupid
-  config.vm.synced_folder "../../repos", "/repos", owner: thedr_userid, group: thedr_groupid, create: true
-  config.vm.synced_folder "../../Downloads", "/Downloads", owner: thedr_userid, group: thedr_groupid, create: true
-
-#  config.vm.synced_folder	"../../",	"/vagrant", owner: "2001", group: "2001"
-#  config.vm.synced_folder "../../repos", "/repos", owner: "2001", group: "2001", create: true
-#  config.vm.synced_folder "../../Downloads", "/Downloads", owner: "2001", group: "2001", create: true
-#  #config.vm.synced_folder "../../log/nakadia", "/var/log/", owner: "2001", group: "2001", create: true
+#  config.vm.synced_folder	"../../bind",	"/bind", owner: thedr_userid, group: thedr_groupid, create: true
+#  config.vm.synced_folder	"../../",	"/vagrant", owner: thedr_userid, group: thedr_groupid
+#  config.vm.synced_folder "../../repos", "/repos", owner: thedr_userid, group: thedr_groupid, create: true
+#  config.vm.synced_folder "../../Downloads", "/Downloads", owner: thedr_userid, group: thedr_groupid, create: true
 
   config.vm.network "forwarded_port", guest: 22, host: 2200, id: "ssh", disabled: true
   config.vm.network "forwarded_port", guest: 5901, host: 24901, host_ip: "127.0.0.1", auto_correct: true
@@ -50,17 +45,10 @@ Vagrant.configure("2") do |config|
   config.vm.provision "file", source: "ansible", destination: "roles/ansible"
 
   config.vm.provider "virtualbox" do |vb|
-    # Display the VirtualBox GUI when booting the machine
-    # Uncomment ONE the lines below to control how much RAM Vagrant gives the VM
-    # We recommend starting with 4096 (4Gb), and moving down if necessary
-    # vb.memory = "1024" # 1Gb
-    # vb.memory = "2048" # 2Gb
-    # vb.memory = "4096" # 4Gb
     vb.name = "Kamino (Kali) Build"
     vb.gui = false
     vb.cpus = "4"
     vb.memory = "8192"
-    #vb.customize ["modifyvm", :id, "--cpuexecutioncap", "50"]
 
     disk01 = './disk01.vdi'
     disk02 = './disk02.vdi'
@@ -100,11 +88,11 @@ Vagrant.configure("2") do |config|
 
      ls -l /home/vagrant
 SHELL
-#  config.vm.provision "ansible_local" do |ansible|
-#    ansible.playbook = "/home/vagrant/playbook.yml"
-#    ansible.galaxy_role_file = "/home/vagrant/requirements.yml"
-#    inventory_path = "/home/vagrant/hosts"
-#  end
+  config.vm.provision "ansible_local" do |ansible|
+    ansible.playbook = "/home/vagrant/playbook.yml"
+    ansible.galaxy_role_file = "/home/vagrant/requirements.yml"
+    inventory_path = "/home/vagrant/hosts"
+  end
   config.vm.provision "shell", inline: <<-SHELL
 	apt-get autoremove -y
 	apt-get clean
