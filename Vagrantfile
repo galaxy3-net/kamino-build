@@ -107,7 +107,7 @@ Vagrant.configure("2") do |config|
      rm -rf /usr/share.old
 
      mkdir -p /tmp/usr/lib
-     mount /dev/sdc /tmp/usr/lib
+     mount /dev/sdd /tmp/usr/lib
      (cd /usr/lib && find . -depth -print | cpio -pdm /tmp/usr/lib)
      umount /tmp/usr/lib
      mv /usr/lib /usr/lib.old
